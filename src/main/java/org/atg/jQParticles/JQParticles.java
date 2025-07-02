@@ -14,8 +14,6 @@ import java.util.logging.Logger;
 public final class JQParticles extends JavaPlugin implements Listener {
 
     private final Logger log = getLogger();
-    private final float playerHeight = 1.7671875f;
-//    private final float playerHeightGap = 0.2328125f;
 
     @Override
     public void onEnable() {
@@ -28,24 +26,27 @@ public final class JQParticles extends JavaPlugin implements Listener {
         log.info("Plugin is disabled");
     }
 
-    public void playPlayerSession(Player player, Particle particle, Sound sound){
+    public void playPlayerSession(Player player, Particle particle, Sound sound, float pitch){
+
         if(player.getGameMode() == GameMode.SPECTATOR) return;
-//        if() return;
+//        if() return; <- mb the logic of vanish plugins
 
         Location playerLocation = player.getLocation();
 
         float playerScale = (float) player.getAttribute(Attribute.SCALE).getValue();
+        float playerHeight = 1.7671875f;
+//        float playerHeightGap = 0.2328125f; <- I wanted to use it, but forgot why (lol)
 
         float playerCenterY = playerHeight*playerScale;
         int occupiedBlocksHeightY = (int) Math.floor(playerCenterY);
 
         Location centerY = playerLocation.clone().add(0.0, playerCenterY/1.85, 0.0);
+        World world = player.getWorld();
 
-        for(Player players : Bukkit.getOnlinePlayers()){
-            players.spawnParticle(Particle.FLASH, centerY, 1, 0.0, 0.0, 0.0, 0.0);
-            players.spawnParticle(particle, centerY, 20*occupiedBlocksHeightY, 0.35*playerScale, 0.45*playerScale, 0.35*playerScale, 0.0);
-            players.playSound(centerY, sound, 1.0f, 1.7f);
-        }
+        world.spawnParticle(Particle.FLASH, centerY, 1, 0.0, 0.0, 0.0, 0.0);
+        world.spawnParticle(particle, centerY, 20*occupiedBlocksHeightY, 0.35*playerScale, 0.45*playerScale, 0.35*playerScale, 0.0);
+        world.playSound(centerY, sound, 1.0f, pitch);
+
     }
 
     @EventHandler
@@ -53,7 +54,8 @@ public final class JQParticles extends JavaPlugin implements Listener {
         playPlayerSession(
                 event.getPlayer(),
                 Particle.TRIAL_SPAWNER_DETECTION_OMINOUS,
-                Sound.ENTITY_ILLUSIONER_PREPARE_MIRROR
+                Sound.ENTITY_ILLUSIONER_PREPARE_MIRROR,
+                1.7f
         );
     }
 
@@ -62,7 +64,8 @@ public final class JQParticles extends JavaPlugin implements Listener {
         playPlayerSession(
                 event.getPlayer(),
                 Particle.TRIAL_SPAWNER_DETECTION,
-                Sound.BLOCK_TRIAL_SPAWNER_SPAWN_ITEM_BEGIN
+                Sound.BLOCK_TRIAL_SPAWNER_SPAWN_ITEM,
+                0.0f
         );
     }
 }
