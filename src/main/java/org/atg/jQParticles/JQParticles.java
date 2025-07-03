@@ -26,7 +26,7 @@ public final class JQParticles extends JavaPlugin implements Listener {
         log.info("Plugin is disabled");
     }
 
-    public void playPlayerSession(Player player, Particle particle, Sound sound, float pitch){
+    private void playPlayerSession(Player player, Particle particle, Sound sound, float pitch){
 
         if(player.getGameMode() == GameMode.SPECTATOR) return;
 //        if() return; <- mb the logic of vanish plugins
