@@ -38,14 +38,14 @@ public final class JQParticles extends JavaPlugin implements Listener {
 //        float playerHeightGap = 0.2328125f; <- I wanted to use it, but forgot why (lol)
 
         float playerCenterY = playerHeight*playerScale;
-        int occupiedBlocksHeightY = (int) Math.floor(playerCenterY);
+        int occupiedBlocksHeightY = (int) Math.ceil(playerCenterY);
 
         Location centerY = playerLocation.clone().add(0.0, playerCenterY/1.85, 0.0);
         World world = player.getWorld();
 
         world.spawnParticle(Particle.FLASH, centerY, 1, 0.0, 0.0, 0.0, 0.0);
         world.spawnParticle(particle, centerY, 20*occupiedBlocksHeightY, 0.35*playerScale, 0.45*playerScale, 0.35*playerScale, 0.0);
-        world.playSound(centerY, sound, 1.0f, pitch);
+        world.playSound(centerY, sound, playerScale/2, pitch);
 
     }
 
